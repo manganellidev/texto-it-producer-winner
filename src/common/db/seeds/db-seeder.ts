@@ -132,13 +132,30 @@ export class DatabaseSeeder extends Seeder {
         .on('data', function (row) {
           const [year, movieTitle, studioName, producerName, winnerString] =
             row;
-          csvData.push({
-            year: Number(year),
-            movieTitle,
-            studioName,
-            producerName,
-            isWinner: winnerString === 'yes',
-          });
+
+          const sanitizeProducerName = (name: string) =>
+            name.trim().replace(/^and\s+/i, '');
+
+          if (producerName.includes(',')) {
+            const producerNames = producerName.split(',');
+            producerNames.forEach((name) =>
+              csvData.push({
+                year: Number(year),
+                movieTitle,
+                studioName,
+                producerName: sanitizeProducerName(name),
+                isWinner: winnerString === 'yes',
+              }),
+            );
+          } else {
+            csvData.push({
+              year: Number(year),
+              movieTitle,
+              studioName,
+              producerName,
+              isWinner: winnerString === 'yes',
+            });
+          }
         })
         .on('end', function () {
           resolve(csvData);

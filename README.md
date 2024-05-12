@@ -28,5 +28,4 @@ npm test
 ```
 
 ## Improvement Points
-- Read each csv row and create separatly each producer and studio when multiples
-- Pre-populate data into database to be asserted in integration tests
+- Pre-populate data into database to be asserted in integration tests.

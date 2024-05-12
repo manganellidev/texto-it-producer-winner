@@ -31,18 +31,18 @@ describe('AwardController', () => {
     const expectedResponseBody = {
       min: [
         {
-          producer: 'Gerald R. Molen',
-          interval: 1,
-          previousWin: 2015,
-          followingWin: 2016,
-        },
-      ],
-      max: [
-        {
           producer: 'Bo Derek',
           interval: 6,
           previousWin: 1984,
           followingWin: 1990,
+        },
+      ],
+      max: [
+        {
+          producer: 'Matthew Vaughn',
+          interval: 13,
+          previousWin: 2002,
+          followingWin: 2015,
         },
       ],
     };
