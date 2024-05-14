@@ -31,10 +31,10 @@ describe('AwardController', () => {
     const expectedResponseBody = {
       min: [
         {
-          producer: 'Bo Derek',
-          interval: 6,
-          previousWin: 1984,
-          followingWin: 1990,
+          producer: 'Joel Silver',
+          interval: 1,
+          previousWin: 1990,
+          followingWin: 1991,
         },
       ],
       max: [
