@@ -135,26 +135,23 @@ export class DatabaseSeeder extends Seeder {
 
           const sanitizeProducerName = (name: string) =>
             name.trim().replace(/^and\s+/i, '');
-
-          if (producerName.includes(',')) {
-            const producerNames = producerName.split(',');
-            producerNames.forEach((name) =>
-              csvData.push({
-                year: Number(year),
-                movieTitle,
-                studioName,
-                producerName: sanitizeProducerName(name),
-                isWinner: winnerString === 'yes',
-              }),
-            );
-          } else {
+          const formatAndAddCsvData = (name: string) =>
             csvData.push({
               year: Number(year),
               movieTitle,
               studioName,
-              producerName,
+              producerName: sanitizeProducerName(name),
               isWinner: winnerString === 'yes',
             });
+
+          if (producerName.includes(',')) {
+            const producerNames = producerName.split(',');
+            producerNames.forEach((name) => formatAndAddCsvData(name));
+          } else if (producerName.includes(' and ')) {
+            const producerNames = producerName.split('and');
+            producerNames.forEach((name) => formatAndAddCsvData(name));
+          } else {
+            formatAndAddCsvData(producerName);
           }
         })
         .on('end', function () {
