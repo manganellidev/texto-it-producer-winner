@@ -65,19 +65,31 @@ export const winnerMoviesMock = [
     },
   },
   {
+    year: 1999,
+    producer: {
+      name: 'Rubeus Hagrid',
+    },
+  },
+  {
     year: 2003,
     producer: {
       name: 'Rubeus Hagrid',
     },
   },
   {
-    year: 2007,
+    year: 2013,
     producer: {
       name: 'Rubeus Hagrid',
     },
   },
   {
-    year: 2013,
+    year: 2020,
+    producer: {
+      name: 'Rubeus Hagrid',
+    },
+  },
+  {
+    year: 2030,
     producer: {
       name: 'Rubeus Hagrid',
     },

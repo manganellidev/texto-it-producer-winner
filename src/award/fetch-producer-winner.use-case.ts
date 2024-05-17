@@ -58,8 +58,7 @@ export class FetchProducerWinner {
     for (const [producer, years] of Object.entries(yearsByProducer)) {
       const sortedYears = years.sort((a, b) => a - b);
 
-      this.mapMaxProducers(producer, sortedYears);
-      this.mapMinProducers(producer, sortedYears);
+      this.mapMinMaxProducers(producer, sortedYears);
     }
 
     return {
@@ -92,59 +91,90 @@ export class FetchProducerWinner {
     return yearsByProducerWithMoreThanOne;
   }
 
-  mapMinProducers(producerName: string, sortedYears: number[]): void {
+  mapMinMaxProducers(producerName: string, sortedYears: number[]) {
     for (const [idx, currYear] of sortedYears.entries()) {
       if (idx === 0) continue;
 
       const previousYear = sortedYears[idx - 1];
-      const diffMinYear = currYear - previousYear;
+      const diffYear = currYear - previousYear;
 
-      if (!this._mapMin.length) {
-        this._minInterval = diffMinYear;
-        this._mapMin = [
-          this.mapToMinMax(
-            producerName,
-            this._minInterval,
-            previousYear,
-            currYear,
-          ),
-        ];
-      } else if (diffMinYear < this._minInterval) {
-        this._minInterval = diffMinYear;
-        this._mapMin = [
-          this.mapToMinMax(
-            producerName,
-            this._minInterval,
-            previousYear,
-            currYear,
-          ),
-        ];
-      } else if (diffMinYear === this._minInterval) {
-        this._mapMin.push(
-          this.mapToMinMax(
-            producerName,
-            this._minInterval,
-            previousYear,
-            currYear,
-          ),
-        );
-      }
+      this.mapMaxProducers(producerName, previousYear, currYear, diffYear);
+      this.mapMinProducers(producerName, previousYear, currYear, diffYear);
     }
   }
 
-  mapMaxProducers(producerName: string, sortedYears: number[]): void {
-    const firstYear = sortedYears[0];
-    const lastYear = sortedYears[sortedYears.length - 1];
-    const diffMaxYear = lastYear - firstYear;
-
-    if (diffMaxYear > this._maxInterval) {
-      this._maxInterval = diffMaxYear;
-      this._mapMax = [
-        this.mapToMinMax(producerName, this._maxInterval, firstYear, lastYear),
+  mapMinProducers(
+    producerName: string,
+    previousYear: number,
+    currYear: number,
+    diffYear: number,
+  ): void {
+    if (!this._mapMin.length) {
+      this._minInterval = diffYear;
+      this._mapMin = [
+        this.mapToMinMax(
+          producerName,
+          this._minInterval,
+          previousYear,
+          currYear,
+        ),
       ];
-    } else if (diffMaxYear === this._maxInterval) {
+    } else if (diffYear < this._minInterval) {
+      this._minInterval = diffYear;
+      this._mapMin = [
+        this.mapToMinMax(
+          producerName,
+          this._minInterval,
+          previousYear,
+          currYear,
+        ),
+      ];
+    } else if (diffYear === this._minInterval) {
+      this._mapMin.push(
+        this.mapToMinMax(
+          producerName,
+          this._minInterval,
+          previousYear,
+          currYear,
+        ),
+      );
+    }
+  }
+
+  mapMaxProducers(
+    producerName: string,
+    previousYear: number,
+    currYear: number,
+    diffYear: number,
+  ): void {
+    if (!this._mapMax.length) {
+      this._maxInterval = diffYear;
+      this._mapMax = [
+        this.mapToMinMax(
+          producerName,
+          this._maxInterval,
+          previousYear,
+          currYear,
+        ),
+      ];
+    } else if (diffYear > this._maxInterval) {
+      this._maxInterval = diffYear;
+      this._mapMax = [
+        this.mapToMinMax(
+          producerName,
+          this._maxInterval,
+          previousYear,
+          currYear,
+        ),
+      ];
+    } else if (diffYear === this._maxInterval) {
       this._mapMax.push(
-        this.mapToMinMax(producerName, this._maxInterval, firstYear, lastYear),
+        this.mapToMinMax(
+          producerName,
+          this._maxInterval,
+          previousYear,
+          currYear,
+        ),
       );
     }
   }
